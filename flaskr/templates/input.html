@@ -1,0 +1,295 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<style>
+    .addRowCol {
+        width: 60vw;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .addRowCol>button {
+        background-color: aquamarine;
+        width: 45%;
+        text-align: center;
+        border: 1px solid #72717150;
+        transition: all .3s;
+    }
+
+    .addRowCol>button:hover {
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4), 0 0 50px rgba(128, 128, 128, 0.1);
+        border-color: transparent;
+    }
+
+    form {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        overflow-x: auto;
+    }
+
+    .csvTable {
+        border-spacing: 0;
+        width: 100%;
+        margin-top: 5vh;
+        margin-left: 15vw;
+        margin-right: 15vw;
+        /*text-align: center;*/
+        white-space: nowrap;
+        /* 行の折り返しを防止する */
+    }
+
+    .tableHeader {
+        border: none;
+        text-align: center;
+    }
+
+    .edit {
+        width: 100%;
+        background-color: rgb(122, 122, 122);
+    }
+
+    .submit {
+        width: 15vw;
+        height: 10vh;
+        margin-top: 1vh;
+        margin-left: 50vw;
+    }
+
+    .tableBody:read-only {
+        background-color: aqua;
+    }
+
+    .articlesForm {
+        margin-left: auto;
+        margin-right: auto;
+        width: 80vw;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        overflow-x: hidden;
+    }
+
+    .articlesSubmit {
+        margin-top: 1vh;
+        width: 15vw;
+        height: 10vh;
+    }
+
+    .deleteRow {
+        width: 5%;
+    }
+
+    .csvTable>:nth-child(1),
+    .csvTable>td:nth-child(1) {
+        width: 70%;
+        /* 1番目の列の幅を100pxに設定 */
+    }
+
+    .csvTable>th:nth-child(2),
+    .csvTable>td:nth-child(2) {
+        width: 30%;
+        /* 2番目の列の幅を200pxに設定 */
+    }
+
+    .articlesForm>.csvTable>tbody>tr:nth-child(odd) {
+        background-color: #adacac;
+        /* 奇数行の背景色を灰色に設定 */
+    }
+
+    /* 偶数行の背景色を指定 */
+    .articlesForm>.csvTable>tbody>tr:nth-child(even) {
+        background-color: #dddcdc;
+        /* 偶数行の背景色を白色に設定 */
+    }
+
+    .titleLine {
+        display: flex;
+        width: 80vw;
+        height: 4vh;
+        margin-top: 1vh;
+        text-align: center;
+    }
+
+    .titleLine>div:nth-child(1) {
+        background-color: #ffffff;
+        width: 5%;
+    }
+
+    .titleLine>div:nth-child(2) {
+        background-color: #9f9c9c;
+        width: 35%;
+    }
+
+    .titleLine>div:nth-child(3) {
+        background-color: rgb(104, 104, 127);
+        width: 60%;
+    }
+
+    .articleLine {
+        display: flex;
+        width: 80vw;
+        height: 8vh;
+        border: 1px solid #72717150;
+        display: flex;
+        transition: all .3s;
+        position: relative;
+    }
+
+    .articleLine:hover {
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4), 0 0 50px rgba(128, 128, 128, 0.1);
+        border-color: transparent;
+    }
+
+    .articleLine>div:nth-child(1) {
+        background-color: #dddcdc;
+        width: 5%;
+        padding: 0.5%;
+        z-index: -1;
+    }
+
+    .articleLine>div:nth-child(2) {
+        background-color: #dddcdc;
+        width: 35%;
+        padding: 0.5%;
+        z-index: -1;
+    }
+
+    .articleLine>div:nth-child(3) {
+        background-color: rgb(176, 176, 228);
+        width: 60%;
+        padding: 0.5%;
+        z-index: -1;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+{% if db_type == "prefSummary" %}
+<main>
+    <div>
+        {{db_type}}登録画面
+    </div>
+    <div>
+        <a href="/consoleMenu">コンソール画面に戻る</a>
+    </div>
+    <div class="addRowCol">
+        <button type="button" onclick="addRowCol()">行を追加</button>
+        <button type="button" onclick="addColumn()">列を追加</button>
+    </div>
+    <form action="/save?type={{db_type}}" method="post">
+        <table class="csvTable">
+            <thead>
+                <tr>
+                    {% for i in data[0] %}
+                    <th>
+                        <input name="tableHeader" value="{{i}}" class="tableHeader"
+                            onkeypress="return disableEnterKeySubmit(event)" readonly>
+                    </th>
+                    {% endfor %}
+                </tr>
+
+            </thead>
+            <tbody>
+                <tr class="editBtns">
+                    {% for i in range(1, col+1) %}
+                    <td><button type="button" class="edit" onclick="enableEdit(this)">edit Column{{i}}</td>
+                    {% endfor %}
+                </tr>
+                {% for i in range(1, row) %}
+                <tr class="tableContents">
+                    {% for j in range(1, col+1) %}
+                    <td><input type="text" name="row{{ i }}-col{{ j }}" value="{{ (data[i][j-1]|string).replace('$', '\"') }}" class="tableBody"
+                        onkeypress="return disableEnterKeySubmit(event)" readonly></td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+                <tr class="lockBtns">
+                    {% for i in range(1, col+1) %}
+                    <td><button type="button" class="edit" onclick="lockEdit(this)">lock Column{{i}}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+        <input type="hidden" name="num_rows" id="numRows" value="{{row}}" onkeypress="return disableEnterKeySubmit(event)">
+        <input type="hidden" name="num_cols" id="numCols" value="{{col}}" onkeypress="return disableEnterKeySubmit(event)">
+        <button type="submit" class="submit">Save</button>
+    </form>
+</main>
+
+{% elif db_type == "articles" %}
+<main>
+    <div>
+        {{db_type}}登録画面
+    </div>
+    <div>
+        <a href="/consoleMenu">コンソール画面に戻る</a>
+    </div>
+    
+    <div class="addArticle addRowCol">
+        <button type="button" onclick="createArticle()">新しい記事を追加</button type="button">
+    </div>
+    <form action="/save?type={{db_type}}" method="post" class="{{db_type}}Form">
+        <div class="articlesTable">
+            <div class="title">
+                
+                <div class="titleLine">
+                    <div class="deleteRow"></div>
+                {% for i in data[0] %}
+                    <div>{{i}}</div>
+                {% endfor %}
+                </div>
+            </div>
+            <div class="articleBody">
+            {% for i in range(1, row) %}
+                
+                <div class="articleLine" id="{{data[i][0]}},{{data[i][1]}},{{ids[i][0]}}">
+                    <button type="button" class="deleteRow {{ids[i][0]}}" onclick="deleteRow(this)">削除</button>
+                {% for j in range(1, col+1) %}
+                    <div>
+                        {% if data[i][j-1] != None %}
+                        {{ data[i][j-1].replace(' $', '\"' ) }} {% else %} {{ "" }} {% endif %} </div>
+                        {% endfor %}
+                        </div>
+                        {% endfor %}
+                        </div>
+                        </div>
+    </form>
+</main>
+
+<script>
+    function openArticle() {
+        document.addEventListener("click", function (event) {
+            let clicked = event.target;
+            if (clicked.getAttribute("class") == "articleLine") {
+                let href = clicked.getAttribute("id").split(",")[2];
+                let url = "/articleDetail?type=" + href;
+                window.location.href = url;
+            }
+        })
+    }
+    openArticle();
+    function createArticle() {
+        let table = document.querySelector(".articleBody");
+        let tableContents = table.querySelectorAll(".articleLine")
+        let url = "/articleDetail?type=new&index={{maxId}}";
+        window.location.href = url;
+    }
+    function deleteRow(button) {
+        let confirmation = confirm("Are you sure you want to start the process?");
+        if (confirmation) {
+            let id = button.classList[1];
+            console.log(id);
+            let url = "/deleteRow?type=" + id.toString();
+            console.log(url)
+            window.location.href = url;
+        }
+    }
+
+    
+</script>
+{% endif %}
+
+{% endblock %}

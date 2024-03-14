@@ -1,0 +1,233 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link rel='stylesheet' href='{{ url_for("static", filename="styleForNotion.css") }}'>
+<style>
+  body {
+    height: 100%;
+  }
+
+  .inputArea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .articleTitle {
+    display: flex;
+    width: 40%;
+    height: 50px;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+  }
+
+  .tags {
+    display: flex;
+    margin-top: 50px;
+    justify-content: center;
+  }
+
+  .tags>div {
+    margin-left: 10px;
+  }
+
+  .addTag {
+    background-color: bisque;
+  }
+
+  .inputThumbnail {
+    display: flex;
+    margin-top: 50px;
+  }
+
+  #previewImg, #thumbnailShow{
+    height: auto;
+    width: 30vw;
+  }
+
+  .articleTitle>input {
+    font-size: large;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+  }
+
+  .uploadHtml {
+    display: flex;
+    justify-content: center;
+    width: 40%;
+    height: 50px;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .uploadHtml {
+    text-align: center;
+    height: 100%;
+    width: 100%;
+  }
+
+  iframe {
+    margin-top: 5vh;
+    width: 90vw;
+    height: 60vh;
+  }
+
+  .iframe {
+    display: flex;
+    justify-content: center;
+  }
+
+  .saveBtn {
+    text-align: center;
+  }
+
+  .previewH2{
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  article{
+    background-color: rgb(180, 179, 177);
+    margin-top: 0;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<form action="/saveArticleData" method="post" enctype="multipart/form-data">
+  <input name="id" value="{{maxId}}" hidden/>
+  <main>
+    <div>
+      プレビュー画面
+      <br>欲しい機能①記事の内容変更（できれば）
+    </div>
+
+    <div>
+      <a href="/inputDB?type=articles">記事一覧画面に戻る</a>
+    </div>
+
+    <div class="inputArea">
+      <div class="articleTitle">
+        <div>タイトル：</div>
+        <input value="{{articleTitle}}" name="articleName" />
+      </div>
+
+      <div class="tags">
+        <div>タグ：</div>
+        {% if articleTags != None %}
+        <div id="tagArea">{{articleTags}}</div>
+        {% else %}
+        <div id="tagArea"></div>
+        {% endif %}
+        <div class="addTag">タグを追加</div>
+        <input type="hidden" name="tags" value="" id="inputTag">
+      </div>
+
+      <div class=inputThumbnail>
+        <div>サムネイル：</div>
+        <input type="file" accept="image/png, image/jpeg" id=inputThumbnail onchange="previewImgFile()" name=inputThumbnail />
+      </div>
+      <img src="{{thumbnail}}" alt=inputThumbnail id="thumbnailShow">
+      <img id="previewImg">
+
+      <div class="uploadHtml">
+        <div>HTMLファイル：</div>
+        <input type="file" accept=".html" name="articleHtml" onchange="previewFile()" id="articleHtml" />
+      </div>
+    </div>
+
+    <div class="iframe">
+      <iframe id="previewFrame"></iframe>
+    </div>
+    <div class="preview">
+      <h2 class="previewH2">プレビュー</h2>
+      {{ htmlContent|safe }}
+    </div>
+
+    <div class="saveBtn">
+      <button id="saveButton" onclick="addTags()">save</button>
+    </div>
+
+  </main>
+</form>
+<script>
+  //iframeタグ内のリンク無効化
+  document.addEventListener('DOMContentLoaded', function () {
+    var iframe = document.querySelector('.iframe>iframe');
+    if (iframe) {
+      iframe.onload = function () {
+        var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        var iframeLinks = iframeDoc.getElementsByTagName('a');
+        for (var i = 0; i < iframeLinks.length; i++) {
+          iframeLinks[i].addEventListener('click', function (event) {
+            event.preventDefault(); // リンクのデフォルトの動作をキャンセル
+          });
+        }
+      };
+    }
+  });
+
+  //HTMLファイルのプレビュー
+  function previewFile() {
+    var fileInput = document.getElementById('articleHtml');
+    var previewFrame = document.getElementById('previewFrame');
+    var file = fileInput.files[0];
+
+    if (file && fileInput.files) { // ファイルが選択されているか、かつファイルが存在する場合
+      var reader = new FileReader();
+      reader.onload = function (event) {
+        previewFrame.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+      
+    }
+  }
+
+  //タグの追加
+  document.addEventListener("DOMContentLoaded", function () {
+    var addTagElement = document.querySelector('.addTag');
+    var tagAreaElement = document.querySelector('#tagArea');
+
+    addTagElement.addEventListener('click', function () {
+      var tag = prompt("新しく追加するタグを入力してください:");
+      if (tag !== null && tag !== "") {
+        tagAreaElement.textContent += "/" + tag;
+      }
+    });
+  });
+
+  //サムネイルのプレビュー
+  function previewImgFile() {
+    var fileInput = document.getElementById('thumbnail');
+    var previewFrame = document.getElementById('previewImg');
+    var file = fileInput.files[0];
+
+    if (file && fileInput.files) { // ファイルが選択されているか、かつファイルが存在する場合
+      var reader = new FileReader();
+      reader.onload = function (event) {
+        previewFrame.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+      let thumbnailShow = document.querySelector("#thumbnailShow");
+      thumbnailShow.style.display = "none";
+    }
+  }
+
+  function addTags() {
+    let tagInfo = document.getElementById('tagArea').textContent;
+    tagInfo = tagInfo.replace("\n", "");
+    let inputTag = document.getElementById("inputTag");
+    inputTag.value = tagInfo;
+    console.log(inputTag.value)
+  }
+
+  document.getElementById('submitBtn').addEventListener('click', function () {
+    addTags();
+  });
+</script>
+{% endblock %}

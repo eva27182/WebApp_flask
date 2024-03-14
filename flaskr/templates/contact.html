@@ -1,0 +1,83 @@
+<!--問い合わせフォーム-->
+{% extends "layout.html" %}
+{% block head %}
+
+<style>
+    h1 {
+        color: #007700;
+        /*文字色*/
+        text-align: center;
+        /*文字-中央寄せ*/
+        padding: 0.5em 0.5em;
+        /*上下の余白*/
+        border-top: solid 15px;
+        /*上線*/
+        border-bottom: solid 15px;
+        /*下線*/
+        border-image: linear-gradient(to right, #006400, #B6FF01, #B6FF01, #006400)1/1 0 15px;
+        /*グラデーション*/
+    }
+
+    .text {
+        /*テキスト*/
+        font-size: 15px;
+        position: relative;
+    }
+
+    form {
+        /*入力フォーム*/
+        position: relative;
+        width: 60vh;
+        margin-left: auto;
+        margin-right: auto;
+        border-radius: 6px;
+        border-top: 1px solid #aaa;
+        border-left: 1px solid #aaa;
+        border-right: 2px solid #aaa;
+        border-bottom: 2px solid #aaa;
+        background-image: none;
+        background-color: #ddd;
+        font-size: 16px;
+        white-space: normal;
+    }
+
+    .submitBtn {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        table-layout: fixed;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .button {
+        /*送信ボタン*/
+        font-size: 15px;
+        position: relative;
+        border-radius: 3px;
+        margin-left: auto;
+        margin-right: auto;
+        background: #EEEEEE;
+    }
+    textarea{
+        resize: none;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<main>
+    <h1>お問い合わせフォーム</h1>
+    <form action="#" method="post">
+        <div class="submitBtn">
+            <div class="text">【メールアドレス】</div>
+            <div><textarea name="mail" cols="50" rows="1" class="form"></textarea></div>
+            <div class="text">【内容】</div>
+            <div><textarea name="content" cols="50" rows="5" class="form"></textarea></div>
+
+            <input type="submit" value="送信" class="button">
+        </div>
+    </form>
+</main>
+
+{% endblock %}

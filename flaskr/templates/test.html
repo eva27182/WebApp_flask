@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<style>
+    main {
+        padding-top: 10vh;
+    }
+
+    .canvas {
+        display: flex;
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: antiquewhite;
+        padding: 10px;
+    }
+
+    .human {
+        width: auto;
+        height: 70px;
+    }
+
+    .human>path {
+        width: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<main>
+    <img src="../static/water-texture.svg">
+    <div class="canvas">
+        <svg class="human" data-name="2" xmlns="http://www.w3.org/2000/svg" viewBox="150 0 210 512">
+            <path
+                d="M256,85.55c23.64,0,42.78-19.16,42.78-42.77C298.78,19.14,279.64,0,256,0S213.22,19.14,213.22,42.78C213.22,66.39,232.36,85.55,256,85.55Z M312.2,97.62H199.81c-20.73,0-43.27,22.55-43.27,43.28v143.77c0,10.36,8.4,18.77,18.76,18.77s18.77-8.4,18.77-18.77v-118.21h8.65v320.88c0,13.62,11.04,24.65,24.64,24.65s24.66-11.03,24.66-24.65v-186.21h7.96v186.21c0,13.62,11.03,24.65,24.66,24.65s24.64-11.03,24.64-24.65V166.47h8.67v118.21c0,10.36,8.4,18.77,18.76,18.77s18.76-8.4,18.76-18.77v-143.77c0-20.73-22.55-43.28-43.27-43.28Z" />
+        </svg>
+        <svg class="human" data-name="2" xmlns="http://www.w3.org/2000/svg" viewBox="150 0 210 512">
+            <path
+                d="M256,85.55c23.64,0,42.78-19.16,42.78-42.77C298.78,19.14,279.64,0,256,0S213.22,19.14,213.22,42.78C213.22,66.39,232.36,85.55,256,85.55Z M312.2,97.62H199.81c-20.73,0-43.27,22.55-43.27,43.28v143.77c0,10.36,8.4,18.77,18.76,18.77s18.77-8.4,18.77-18.77v-118.21h8.65v320.88c0,13.62,11.04,24.65,24.64,24.65s24.66-11.03,24.66-24.65v-186.21h7.96v186.21c0,13.62,11.03,24.65,24.66,24.65s24.64-11.03,24.64-24.65V166.47h8.67v118.21c0,10.36,8.4,18.77,18.76,18.77s18.76-8.4,18.76-18.77v-143.77c0-20.73-22.55-43.28-43.27-43.28Z" />
+        </svg>
+    </div>
+
+
+</main>
+<script>
+    function createHuman() {
+        for (var i = 0; i < 10; i++) {
+            let div = document.querySelector(".canvas");
+            var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            svg.setAttribute("class", "human");
+            svg.setAttribute("data-name", "2");
+            svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+            svg.setAttribute("viewBox", "150 0 210 512");
+
+            // パス要素を作成
+            var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", "M256,85.55c23.64,0,42.78-19.16,42.78-42.77C298.78,19.14,279.64,0,256,0S213.22,19.14,213.22,42.78C213.22,66.39,232.36,85.55,256,85.55Z M312.2,97.62H199.81c-20.73,0-43.27,22.55-43.27,43.28v143.77c0,10.36,8.4,18.77,18.76,18.77s18.77-8.4,18.77-18.77v-118.21h8.65v320.88c0,13.62,11.04,24.65,24.64,24.65s24.66-11.03,24.66-24.65v-186.21h7.96v186.21c0,13.62,11.03,24.65,24.66,24.65s24.64-11.03,24.64-24.65V166.47h8.67v118.21c0,10.36,8.4,18.77,18.76,18.77s18.76-8.4,18.76-18.77v-143.77c0-20.73-22.55-43.28-43.27-43.28Z");
+
+            // SVG要素をHTMLに追加
+            document.body.appendChild(svg);
+            svg.appendChild(path);
+            div.appendChild(svg)
+        }
+    }
+    createHuman();
+</script>
+{% endblock %}

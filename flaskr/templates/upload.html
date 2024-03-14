@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block head %}
+<title>送信完了</title>
+<style>
+    h1 {
+        color: #007700;
+        /*文字色*/
+        text-align: center;
+        /*文字-中央寄せ*/
+        padding: 0.5em 0.5em;
+        /*上下の余白*/
+        border-top: solid 15px;
+        /*上線*/
+        border-bottom: solid 15px;
+        /*下線*/
+        border-image: linear-gradient(to right, #006400, #B6FF01, #B6FF01, #006400)1/1 0 15px;
+        /*グラデーション*/
+    }
+
+    .cover {
+        /*画像*/
+        background-repeat: no-repeat;
+        position: relative;
+        width: 60vh;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .text {
+        /*テキスト*/
+        font-size: 25px;
+        display: inline-block;
+        vertical-align: top;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+
+{% block body %}
+
+<main>
+    <h1>送信完了</h1>
+    <div class="cover">
+        <p class="text">お問い合わせありがとうございます。<br>
+            <br>
+            時間のある時に連絡します
+        </p>
+    </div>
+</main>
+{% endblock %}

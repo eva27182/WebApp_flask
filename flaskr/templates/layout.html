@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<head>
+    <title>地方自治体まとめ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleForMap.css') }}">
+    <meta charset="UTF-8">
+    {% block head %}
+    {% endblock %}
+</head>
+
+<body>
+    <div class="header">
+        <div class="headerContainer">
+            <div class="title_label">
+                <a id="title" href="/">市町村情報まとめ</a>
+            </div>
+            <div class="header_menus">
+                <div class="header_menu_1">
+                    <a id="header_menu" href="/events">イベント情報</a>
+                </div>
+                <!-- 
+                <div class="header_menu_2">
+                    <a id="header_menu">経済</a>
+                </div>
+                -->
+                <div class="header_menu_3">
+                    <a id="header_menu">観光</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block body %}
+    {% endblock %}
+
+    <footer id="footer">
+        <div class="footer">
+            <a href="/contact">contact me</a>
+        </div>
+
+    </footer>
+
+    <script src="{{ url_for('static', filename='mainForMap.js') }}"></script>
+</body>

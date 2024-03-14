@@ -1,0 +1,109 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<!--背景-->
+<svg id="svgWave">
+    <defs>
+        <filter id="disFilter">
+            <feTurbulence type="turbulence" baseFrequency="0.01" numOctaves="3" seed="1" result="turbulence">
+                <animate attributeName="baseFrequency" values="0.01;0.005;0.01;" dur="30s" begin="0"
+                    repeatCount="indefinite" />
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="30" xChannelSelector="R" yChannelSelector="B"
+                result="displacement" />
+        </filter>
+    </defs>
+    <g id="background">
+        <image xlink:href="{{ url_for('static', filename='water-texture.jpg') }}" x="0" y="0" height="100%" width="100%"
+            preserveAspectRatio="xMidYMid slice" />
+    </g>
+</svg>
+<div id="js-mouse"></div>
+
+<main id="indexMain">
+    <div class="main_flex">
+        <div id="map_canvas">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" id="svg">
+                {% for a in svgData: %}
+                {% if a != None %}
+                {{a.replace("$", '"') | safe }}
+                {% endif %}
+                {% endfor %}
+                <polyline class="cls-2" points="666.81 417.4 551.76 417.4 485.34 483.83 485.34 581.96" />
+            </svg>
+        </div>
+    </div>
+    <div class="summary" hidden>
+    
+        <div class="drawHumanArea">
+            <button type="button" onclick="hideTable(this)">非表示</button>
+            <div class="prefName"></div>
+            <div class="drawTab">
+                <button>総人口</button>
+                <button>日本人人口</button>
+                <button>男女比率</button>
+            </div>
+            <div class="ratioCanvas">
+                <div>
+                    <div class="male">
+                        <div class="title">男性</div>
+                        <div class="ratio"></div>
+                    </div>
+                    <div class="female">
+                        <div class="title">女性</div>
+                        <div class="ratio"></div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="canvas"></div>
+        </div>
+        
+        <table class="summaryTable" id="summaryTable">
+            {% for i in range(prefTable|length): %}
+            <tr>
+                {% for j in range(prefTable[i]|length): %}
+                {% if prefTable[i][j] != None %}
+                <td class="summaryTr pref_{{prefTable[4][j]|int}} row_{{i}}">{{prefTable[i][j]}}</td>
+                {% elif prefTable[i][j] == None %}
+                <td class="summaryTr pref_{{prefTable[4][j]|int}}"></td>
+                {% endif %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+        
+    </div>
+    
+    
+    <div id="additionlContents">
+        <div class="contentsBox">
+            <a>おすすめ記事一覧</a>
+            <ul class="eventsInfo">
+                {% for i in range(title|length -1, title|length - 6, -1) %}
+                <li class="articles">
+                    <div><img src="{{thumbnail[i]}}" alt="Thumbnail" class="thumbnail"></div>
+                    <div class="insideContent">
+                        <div class="upper">
+                            <a href="/events/{{title[i]}}?index={{articleIndex[i]}}">{{title[i]}}</a>
+                        </div>
+                        <div class="lower">
+                            <a>{{tags[i][0]}}</a>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</main>
+
+
+
+<script>
+    
+</script>
+
+
+{% endblock %}
