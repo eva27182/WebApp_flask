@@ -1,0 +1,373 @@
+html {
+    width: 100%;
+    overflow-x: hidden;
+    user-select: none
+        /* 選択を禁止する */
+}
+
+html::-webkit-scrollbar {
+    display: none;
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+}
+
+body {
+    /*cursor: none;*/
+    height: 100vh;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+    background-color: #cbcaca;
+}
+
+main {
+    padding-top: 8vh;
+    margin-bottom: 5vh;
+}
+
+#indexMain {
+    padding-top: 8vh;
+    margin-bottom: 0;
+    padding-bottom: 5vh;
+    background: linear-gradient(to bottom, #db4db300, #db4db390);
+}
+
+/*a {
+    cursor: none;
+}*/
+
+.header {
+    white-space: nowrap;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 8vh;
+    margin-left: 0;
+    margin-right: 0;
+    background: linear-gradient(to bottom, #00000090, #00000010);
+    z-index: 9999;
+}
+
+#js-mouse {
+    pointer-events: none;
+    position: fixed;
+    top: -10px;
+    left: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: rgba(237, 56, 19, 0.5);
+    border-radius: 50%;
+    transform: translate(0, 0) scale(1.1);
+    transition: all 0.1s ease-out;
+    z-index: 9999;
+    opacity: 0;
+}
+
+#js-mouse.js-hover {
+    top: -15px;
+    left: -15px;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(129, 66, 200, 0.5);
+}
+
+
+div.headerContainer {
+    margin-top: 3vh;
+    height: 5vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    table-layout: fixed;
+}
+
+div.title_label {
+    vertical-align: middle;
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#title {
+    padding-left: 5%;
+    text-align: center;
+    font-size: 30px;
+    color: #d19418;
+    text-decoration: none;
+}
+
+div.header_menus {
+    justify-content: end;
+    width: 100%;
+    display: flex;
+    padding-right: 5%;
+    font-size: 20px;
+}
+
+div.header_menus div {
+    padding-left: 1%;
+}
+
+#map_canvas {
+    height: 100vh;
+    display: flex;
+}
+
+#svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+#svg>a {
+    z-index: 100;
+}
+
+#svg>a>path {
+    transition: fill 0.3s;
+}
+
+#svg>a>path:hover {
+    fill: #ffce00;
+    cursor: pointer;
+}
+
+.cls-1 {
+    fill: #5fb96ee0;
+    cursor: pointer;
+}
+
+.cls-1,
+.cls-2 {
+    fill-rule: evenodd;
+    stroke: #040000;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: .48px;
+}
+
+
+.cls-2 {
+    fill: none;
+}
+
+.biwako {
+    fill: aqua;
+}
+
+footer {
+    height: 5vh;
+    width: 100vw;
+    background-color: #ffce00;
+}
+
+
+
+#background {
+    filter: url("#disFilter");
+}
+
+#svgWave {
+    z-index: -1;
+    position: fixed;
+    top: -10vh;
+    left: -10vw;
+    width: 120vw;
+    height: 120vh;
+}
+
+.summaryTable {
+    white-space: nowrap;
+    background-color: #faebd7d0;
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.1rem;
+    width: 81%;
+}
+
+.summaryTable td {
+    width: 27%;
+    text-align: center;
+}
+
+/*交互の背景色（偶数行の色を指定）*/
+.summaryTable tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.summaryHeader {
+    background-color: #fad995;
+}
+
+#additionlContents {
+    margin-top: 5vh;
+    width: 100vw;
+    padding-bottom: 10px;
+}
+
+#additionlContents>.contentsBox {
+    width: 70%;
+    height: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #e0ebf490;
+    position: relative;
+    z-index: 999;
+}
+
+
+.contentsBox>a {
+    display: flex;
+    height: 10%;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+}
+
+.contentsBox>ul {
+    height: 90%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-content: stretch;
+    flex-wrap: wrap;
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 10px;
+}
+
+.contentsBox ul>li>a {
+    width: 100%;
+    text-align: center;
+}
+
+.articles {
+    margin-top: 1px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60vw;
+    height: 15vh;
+    border: 1px solid #72717150;
+    display: flex;
+    transition: all .3s;
+    position: relative;
+}
+
+.articles:hover {
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4), 0 0 50px rgba(128, 128, 128, 0.1);
+    border-color: transparent;
+    cursor: pointer;
+}
+
+.articles>div {
+    z-index: -1;
+}
+
+
+.thumbnail {
+    height: 100%;
+    aspect-ratio: 1;
+}
+
+.articles>div.insideContent {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+div.upper {
+    height: 45%;
+    background-color: #f0f8ff90;
+}
+
+div.lower {
+    height: 55%;
+    background-color: #acb2b790;
+}
+
+div.upper>a,
+div.lower>a {
+    margin: 5px;
+}
+
+
+.footer {
+    width: 80vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.drawHumanArea {
+    
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.prefName{
+    background-color: #f2f2f2;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.drawTab {
+    display: flex;
+}
+
+.drawTab>button {
+    background-color: #d1c2c2;
+    text-align: left;
+    flex: 1;
+    border-top-right-radius: 10px;
+    border: 1px solid #040000;
+    transition: 0.3s;
+}
+
+.drawTab>button:hover {
+    border-top-right-radius: 10px;
+    background-color: rgb(167, 111, 0);
+}
+.ratioCanvas{
+    background-color: antiquewhite;
+    
+}
+.ratioCanvas>div{
+    margin-right: auto;
+    margin-left: auto;
+    width: 60%;
+    display: flex;
+    text-align: center;
+}
+.ratioCanvas>div>div{
+    border: 1px solid #040000;
+    flex: 1;
+}
+.ratioCanvas>div>div>.ratio{
+    font-size: 2rem;
+}
+
+.canvas {
+    background-color: antiquewhite;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.human {
+    width: 5%;
+    ;
+}
+
+.human>path {
+    width: 100%;
+}
